@@ -26,3 +26,6 @@ install-golangci-lint:
 
 lint:
 	GOBIN=$(LOCAL_BIN) golangci-lint run ./... --config .golangci.pipeline.yaml
+
+run:
+	go run cmd/main.go
