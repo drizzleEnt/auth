@@ -8,8 +8,11 @@ import (
 
 	"github.com/drizzleent/auth/internal/config"
 	"github.com/drizzleent/auth/internal/lib/handler"
+	"github.com/drizzleent/auth/internal/lib/repository"
 	"github.com/drizzleent/auth/pkg/user_v1"
 	_ "github.com/fatih/color"
+	_ "github.com/lib/pq"
+	"github.com/subosito/gotenv"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -28,10 +31,30 @@ func main() {
 		aLog.Fatalf(errStr)
 	}
 
+	if err := gotenv.Load(); err != nil {
+		aLog.Fatalf("error loading env vars %v", err)
+	}
+
+	db, err := repository.NewPostgresDb(repository.Config{
+		Host:     cfg.Host,
+		Port:     os.Getenv("PG_PORT"),
+		UserName: os.Getenv("PG_USER"),
+		Password: os.Getenv("PG_PASSWORD"),
+		DBName:   os.Getenv("PG_DATABASE_NAME"),
+		SSLMode:  "disable",
+	})
+	fmt.Println(cfg.Host, os.Getenv("PG_PORT"), os.Getenv("PG_USER"), os.Getenv("PG_PASSWORD"), os.Getenv("PG_DATABASE_NAME"))
+
+	if err != nil {
+		aLog.Fatalf("cant init db %v", err)
+	}
+
 	s := grpc.NewServer()
 	reflection.Register(s)
 
-	rpcSrv := handler.NewUserRpcsServer(aLog)
+	repos := repository.NewRepository(db)
+
+	rpcSrv := handler.NewUserRpcsServer(aLog, repos) //TODO: ADD SERVICE
 	user_v1.RegisterUserV1Server(s, rpcSrv)
 
 	done := make(chan os.Signal, 1)

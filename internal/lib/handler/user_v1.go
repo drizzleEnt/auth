@@ -2,12 +2,11 @@ package handler
 
 import (
 	"context"
-	crypto "crypto/rand"
 	"fmt"
 	"log"
-	"math/big"
 
-	"github.com/brianvoe/gofakeit"
+	"github.com/drizzleent/auth"
+	"github.com/drizzleent/auth/internal/lib/repository"
 	desc "github.com/drizzleent/auth/pkg/user_v1"
 	"github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc/codes"
@@ -19,11 +18,13 @@ import (
 type UserRpcServerV1 struct {
 	desc.UnimplementedUserV1Server
 	log *log.Logger
+	db  repository.Authorisation //TODO REMOVE FROM HERE
 }
 
-func NewUserRpcsServer(log *log.Logger) *UserRpcServerV1 {
+func NewUserRpcsServer(log *log.Logger, db repository.Authorisation) *UserRpcServerV1 {
 	return &UserRpcServerV1{
 		log: log,
+		db:  db,
 	}
 }
 
@@ -41,16 +42,22 @@ func (s *UserRpcServerV1) Create(ctx context.Context, req *desc.CreateRequest) (
 		s.log.Printf("Deadline %v\n", dline)
 	}
 
-	safeNum, err := crypto.Int(crypto.Reader, big.NewInt(100123))
+	user := auth.User{
+		Name:     req.Name,
+		Email:    req.Email,
+		Password: req.Password,
+		Role:     req.Role.String(),
+	}
+
+	id, err := s.db.CreateUser(user)
+
 	if err != nil {
-		s.log.Printf("cant generate rand id %v\n", err.Error())
+		s.log.Printf("cant create user in database %v\n", err.Error())
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}
 
-	id := safeNum.Int64()
-
 	return &desc.CreateResponse{
-		Id: id,
+		Id: int64(id),
 	}, nil
 }
 func (s *UserRpcServerV1) Get(ctx context.Context, req *desc.GetRequest) (*desc.GetResponse, error) {
@@ -61,28 +68,24 @@ func (s *UserRpcServerV1) Get(ctx context.Context, req *desc.GetRequest) (*desc.
 		s.log.Printf("Deadline %v\n", dline)
 	}
 
-	role := gofakeit.RandString([]string{"ADMIN", "USER"})
+	resp, err := s.db.GetUser(int(req.Id))
 
-	resp := desc.GetResponse{
-		Id:        req.GetId(),
-		Name:      gofakeit.Name(),
-		Email:     gofakeit.Email(),
-		Role:      desc.Role(desc.Role_value[role]),
-		CreatedAt: timestamppb.New(gofakeit.Date()),
-		UpdatedAt: timestamppb.New(gofakeit.Date()),
+	if err != nil {
+		s.log.Printf("Error try get user whit id=%v %v\n", req.Id, err)
+		return nil, status.Errorf(codes.Internal, err.Error())
 	}
 
-	respStr := fmt.Sprintf("Responce Get \n\tId: %v,\n\tName: %v,\n\tEmail: %v,\n\tRole: %v,\n\tCreatedAt: %v,\n\tUpdatedAt: %v\n",
-		resp.Id,
-		resp.Name,
-		resp.Email,
-		resp.Role,
-		resp.CreatedAt,
-		resp.UpdatedAt)
-
-	s.log.Println(respStr)
-
-	return &resp, nil
+	return &desc.GetResponse{
+		Id:    int64(resp.Id),
+		Name:  resp.Name,
+		Email: resp.Email,
+		Role:  0,
+		CreatedAt: &timestamppb.Timestamp{
+			Seconds: resp.CreatedAt.Unix(),
+			Nanos:   int32(resp.CreatedAt.Nanosecond()),
+		},
+		UpdatedAt: &timestamppb.Timestamp{},
+	}, nil
 }
 func (s *UserRpcServerV1) Update(ctx context.Context, req *desc.UpdateRequest) (*empty.Empty, error) {
 	s.log.Printf("Receive Update")
