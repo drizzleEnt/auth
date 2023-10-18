@@ -1,9 +1,10 @@
 package repository
 
 import (
+	"context"
 	"fmt"
 
-	"github.com/jmoiron/sqlx"
+	"github.com/jackc/pgx/v4"
 )
 
 const (
@@ -19,19 +20,22 @@ type Config struct {
 	SSLMode  string
 }
 
-func NewPostgresDb(cfg Config) (*sqlx.DB, error) {
-	db, err := sqlx.Open("postgres", fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
-		cfg.Host, cfg.Port, cfg.UserName, cfg.DBName, cfg.Password, cfg.SSLMode))
+func NewPostgresDb(cfg Config) (*pgx.Conn, error) {
+
+	ctx := context.Background()
+	con, err := pgx.Connect(ctx, fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s sslmode=%s",
+		cfg.Host, cfg.Port, cfg.DBName, cfg.UserName, cfg.Password, cfg.SSLMode))
 
 	if err != nil {
 		return nil, err
 	}
 
-	err = db.Ping()
+	//defer con.Close(ctx)
 
+	err = con.Ping(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	return db, nil
+	return con, nil
 }

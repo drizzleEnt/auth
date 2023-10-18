@@ -1,20 +1,22 @@
 package repository
 
 import (
+	"context"
+
 	"github.com/drizzleent/auth"
-	"github.com/jmoiron/sqlx"
+	"github.com/jackc/pgx/v4"
 )
 
 type Authorisation interface {
-	CreateUser(auth.User) (int, error)
-	GetUser(int) (auth.User, error)
+	CreateUser(context.Context, auth.User) (int, error)
+	GetUser(context.Context, int) (auth.User, error)
 }
 
 type Ropository struct {
 	Authorisation
 }
 
-func NewRepository(db *sqlx.DB) *Ropository {
+func NewRepository(db *pgx.Conn) *Ropository {
 	return &Ropository{
 		Authorisation: NewAuthPostgres(db),
 	}

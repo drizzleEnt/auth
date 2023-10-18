@@ -49,7 +49,7 @@ func (s *UserRpcServerV1) Create(ctx context.Context, req *desc.CreateRequest) (
 		Role:     req.Role.String(),
 	}
 
-	id, err := s.db.CreateUser(user)
+	id, err := s.db.CreateUser(ctx, user)
 
 	if err != nil {
 		s.log.Printf("cant create user in database %v\n", err.Error())
@@ -68,7 +68,7 @@ func (s *UserRpcServerV1) Get(ctx context.Context, req *desc.GetRequest) (*desc.
 		s.log.Printf("Deadline %v\n", dline)
 	}
 
-	resp, err := s.db.GetUser(int(req.Id))
+	resp, err := s.db.GetUser(ctx, int(req.Id))
 
 	if err != nil {
 		s.log.Printf("Error try get user whit id=%v %v\n", req.Id, err)
