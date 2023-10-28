@@ -5,8 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/drizzleent/auth"
-	"github.com/drizzleent/auth/internal/lib/repository"
+	"github.com/drizzleent/auth/internal/repository"
 	desc "github.com/drizzleent/auth/pkg/user_v1"
 	"github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc/codes"
@@ -42,22 +41,22 @@ func (s *UserRpcServerV1) Create(ctx context.Context, req *desc.CreateRequest) (
 		s.log.Printf("Deadline %v\n", dline)
 	}
 
-	user := auth.User{
-		Name:     req.Name,
-		Email:    req.Email,
-		Password: req.Password,
-		Role:     req.Role.String(),
-	}
+	// user := auth.User{
+	// 	Name:     req.Name,
+	// 	Email:    req.Email,
+	// 	Password: req.Password,
+	// 	Role:     req.Role.String(),
+	// }
 
-	id, err := s.db.CreateUser(ctx, user)
+	// id, err := s.db.CreateUser(ctx, user)
 
-	if err != nil {
-		s.log.Printf("cant create user in database %v\n", err.Error())
-		return nil, status.Errorf(codes.Internal, err.Error())
-	}
+	// if err != nil {
+	// 	s.log.Printf("cant create user in database %v\n", err.Error())
+	// 	return nil, status.Errorf(codes.Internal, err.Error())
+	// }
 
 	return &desc.CreateResponse{
-		Id: int64(id),
+		Id: 0, //int64(id),
 	}, nil
 }
 func (s *UserRpcServerV1) Get(ctx context.Context, req *desc.GetRequest) (*desc.GetResponse, error) {
@@ -68,7 +67,7 @@ func (s *UserRpcServerV1) Get(ctx context.Context, req *desc.GetRequest) (*desc.
 		s.log.Printf("Deadline %v\n", dline)
 	}
 
-	resp, err := s.db.GetUser(ctx, int(req.Id))
+	resp, err := s.db.Get(ctx, int(req.Id))
 
 	if err != nil {
 		s.log.Printf("Error try get user whit id=%v %v\n", req.Id, err)
@@ -76,9 +75,9 @@ func (s *UserRpcServerV1) Get(ctx context.Context, req *desc.GetRequest) (*desc.
 	}
 
 	return &desc.GetResponse{
-		Id:    int64(resp.Id),
-		Name:  resp.Name,
-		Email: resp.Email,
+		Id:    0,  //int64(resp.Id),
+		Name:  "", //resp.Name,
+		Email: "", //resp.Email,
 		Role:  0,
 		CreatedAt: &timestamppb.Timestamp{
 			Seconds: resp.CreatedAt.Unix(),

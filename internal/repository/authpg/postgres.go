@@ -1,4 +1,4 @@
-package repository
+package authpg
 
 import (
 	"context"
@@ -8,7 +8,14 @@ import (
 )
 
 const (
-	userTable = "users"
+	userTable        = "users"
+	idColumn         = "id"
+	nameColumn       = "name"
+	emailColumn      = "email"
+	roleColumn       = "role"
+	passwordColumn   = "password"
+	ctraetedAtColumn = "created_at"
+	updatedAtColumn  = "updated_at"
 )
 
 type Config struct {

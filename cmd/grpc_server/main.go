@@ -8,7 +8,8 @@ import (
 
 	"github.com/drizzleent/auth/internal/config"
 	"github.com/drizzleent/auth/internal/lib/handler"
-	"github.com/drizzleent/auth/internal/lib/repository"
+	"github.com/drizzleent/auth/internal/repository"
+	"github.com/drizzleent/auth/internal/repository/authpg"
 	"github.com/drizzleent/auth/pkg/user_v1"
 	_ "github.com/fatih/color"
 	_ "github.com/lib/pq"
@@ -35,7 +36,7 @@ func main() {
 		aLog.Fatalf("error loading env vars %v", err)
 	}
 
-	db, err := repository.NewPostgresDb(repository.Config{
+	db, err := authpg.NewPostgresDb(authpg.Config{
 		Host:     cfg.Host,
 		Port:     os.Getenv("PG_PORT"),
 		UserName: os.Getenv("PG_USER"),
@@ -43,7 +44,6 @@ func main() {
 		DBName:   os.Getenv("PG_DATABASE_NAME"),
 		SSLMode:  "disable",
 	})
-	fmt.Println(cfg.Host, os.Getenv("PG_PORT"), os.Getenv("PG_USER"), os.Getenv("PG_PASSWORD"), os.Getenv("PG_DATABASE_NAME"))
 
 	if err != nil {
 		aLog.Fatalf("cant init db %v", err)

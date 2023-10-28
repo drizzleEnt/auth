@@ -7,7 +7,6 @@ require (
 	github.com/golang/protobuf v1.5.3
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/jackc/pgx/v4 v4.18.1
-	github.com/jmoiron/sqlx v1.3.5
 	github.com/lib/pq v1.10.2
 	github.com/subosito/gotenv v1.6.0
 	google.golang.org/grpc v1.58.2
