@@ -2,6 +2,7 @@ package auth
 
 import (
 	"log"
+	"os"
 
 	"github.com/drizzleent/auth/internal/service"
 	desc "github.com/drizzleent/auth/pkg/user_v1"
@@ -13,7 +14,8 @@ type Implementation struct {
 	authservice service.AuthService
 }
 
-func NewUserRpcsServer(log *log.Logger, service service.AuthService) *Implementation {
+func NewImplementation(service service.AuthService) *Implementation {
+	log := log.New(os.Stdout, "INFO:", log.Flags())
 	return &Implementation{
 		log:         log,
 		authservice: service,
