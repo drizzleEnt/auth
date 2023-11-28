@@ -1,72 +1,26 @@
 package main
 
 import (
-	"fmt"
+	"context"
 	"log"
-	"net"
-	"os"
 
-	"github.com/drizzleent/auth/internal/config"
-	"github.com/drizzleent/auth/internal/lib/handler"
-	"github.com/drizzleent/auth/internal/repository"
-	"github.com/drizzleent/auth/internal/repository/authpg"
-	"github.com/drizzleent/auth/pkg/user_v1"
+	"github.com/drizzleent/auth/internal/app"
 	_ "github.com/fatih/color"
 	_ "github.com/lib/pq"
-	"github.com/subosito/gotenv"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
 )
 
 func main() {
-	cfg := config.MustConfig()
+	ctx := context.Background()
 
-	aLog := log.New(os.Stdout, "INFO:", log.Flags())
-
-	url := fmt.Sprintf("%s:%s", cfg.Host, cfg.GrpcPort)
-
-	lis, err := net.Listen("tcp", url)
+	app, err := app.NewApp(ctx)
 
 	if err != nil {
-		errStr := fmt.Sprintf("failed to listen server : %v", err)
-		aLog.Fatalf(errStr)
+		log.Fatalf("Failed to init app: %v", err.Error())
 	}
 
-	if err := gotenv.Load(); err != nil {
-		aLog.Fatalf("error loading env vars %v", err)
-	}
-
-	db, err := authpg.NewPostgresDb(authpg.Config{
-		Host:     cfg.Host,
-		Port:     os.Getenv("PG_PORT"),
-		UserName: os.Getenv("PG_USER"),
-		Password: os.Getenv("PG_PASSWORD"),
-		DBName:   os.Getenv("PG_DATABASE_NAME"),
-		SSLMode:  "disable",
-	})
+	err = app.Run()
 
 	if err != nil {
-		aLog.Fatalf("cant init db %v", err)
+		log.Fatalf("Failed to run app: %v", err.Error())
 	}
-
-	s := grpc.NewServer()
-	reflection.Register(s)
-
-	repos := repository.NewRepository(db)
-
-	rpcSrv := handler.NewUserRpcsServer(aLog, repos) //TODO: ADD SERVICE
-	user_v1.RegisterUserV1Server(s, rpcSrv)
-
-	done := make(chan os.Signal, 1)
-
-	go func() {
-		if err := s.Serve(lis); err != nil {
-			aLog.Fatalf("failed to serve %v", err)
-		}
-	}()
-
-	aLog.Println("Server Started")
-	<-done
-	s.GracefulStop()
-	aLog.Println("Server stopped")
 }

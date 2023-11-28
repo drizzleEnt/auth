@@ -4,10 +4,10 @@ import (
 	"context"
 	"errors"
 
-	model1 "github.com/drizzleent/auth/internal/model"
+	"github.com/drizzleent/auth/internal/model"
 )
 
-func (s *Service) Update(ctx context.Context, user *model1.User) error {
+func (s *Service) Update(ctx context.Context, user *model.UserUpdate) error {
 	err := s.repo.Update(ctx, user)
 	if err != nil {
 		return errors.New("Service.Update: " + err.Error())

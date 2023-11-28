@@ -5,15 +5,27 @@ import (
 	repoModel "github.com/drizzleent/auth/internal/repository/data_model"
 )
 
-func ToModleUserFromRepo(rUser *repoModel.User) *model.User {
+func ToModleUserFromRepo(user repoModel.User) *model.User {
 
 	return &model.User{
-		ID:        rUser.ID,
-		Name:      rUser.Name,
-		Email:     rUser.Name,
-		Password:  rUser.Password,
-		Role:      rUser.Role,
-		CreatedAt: rUser.CreatedAt,
-		UpdatedAt: rUser.UpdatedAt,
+		UserCreate: ToUserCFromRepo(user.UserCreate),
+		CreatedAt:  user.CreatedAt,
+		UpdatedAt:  user.UpdatedAt,
+	}
+}
+
+func ToUserCFromRepo(user repoModel.UserCreate) model.UserCreate {
+	return model.UserCreate{
+		UserUpdate: ToUserUFromRepo(user.UserUpdate),
+		Password:   user.Password,
+	}
+}
+
+func ToUserUFromRepo(user repoModel.UserUpdate) model.UserUpdate {
+	return model.UserUpdate{
+		ID:    user.ID,
+		Name:  user.Name,
+		Email: user.Email,
+		Role:  user.Role,
 	}
 }

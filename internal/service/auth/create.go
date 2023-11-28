@@ -4,10 +4,10 @@ import (
 	"context"
 	"errors"
 
-	model1 "github.com/drizzleent/auth/internal/model"
+	"github.com/drizzleent/auth/internal/model"
 )
 
-func (s *Service) Create(ctx context.Context, user *model1.User) (int, error) {
+func (s *Service) Create(ctx context.Context, user *model.UserCreate) (int64, error) {
 
 	id, err := s.repo.Create(ctx, user)
 

@@ -19,21 +19,20 @@ type serviceProvider struct {
 	pgConfig  config.PGConfig
 	grpcCofig config.GRPCConfig
 
-	dbClient       db.Client
-	txManager      db.TxManager
+	dbClient db.Client
+	//txManager      db.TxManager
+
 	authRepository repository.Authorisation
-
-	authService service.AuthService
-
-	authImp *auth.Implementation
+	authService    service.AuthService
+	authImp        *auth.Implementation
 }
 
-func NewProvider() *serviceProvider {
+func newServiceProvider() *serviceProvider {
 	return &serviceProvider{}
 }
 
 func (s *serviceProvider) PGConfig() config.PGConfig {
-	if s.pgConfig != nil {
+	if s.pgConfig == nil {
 		cfg, err := env.NewPGConfig()
 		if err != nil {
 			log.Fatalf("failed to get pg config: %s", err.Error())
@@ -46,7 +45,7 @@ func (s *serviceProvider) PGConfig() config.PGConfig {
 }
 
 func (s *serviceProvider) GRPCConfig() config.GRPCConfig {
-	if s.grpcCofig != nil {
+	if s.grpcCofig == nil {
 		cfg, err := env.NewGrpcConfig()
 		if err != nil {
 			log.Fatalf("failed to get grpc config: %s", err.Error())
@@ -59,8 +58,8 @@ func (s *serviceProvider) GRPCConfig() config.GRPCConfig {
 }
 
 func (s *serviceProvider) DbClient(ctx context.Context) db.Client {
-	if s.dbClient != nil {
-		cl, err := pg.New(ctx, s.pgConfig.DSN())
+	if s.dbClient == nil {
+		cl, err := pg.New(ctx, s.PGConfig().DSN())
 		if err != nil {
 			log.Fatalf("Failed to create db client %s", err.Error())
 		}
@@ -103,4 +102,5 @@ func (s *serviceProvider) AuthImpl(ctx context.Context) *auth.Implementation {
 	if s.authImp == nil {
 		s.authImp = auth.NewImplementation(s.AuthService(ctx))
 	}
+	return s.authImp
 }

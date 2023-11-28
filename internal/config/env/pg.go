@@ -30,7 +30,7 @@ func NewPGConfig() (*pgConfig, error) {
 		return nil, errors.New("db host not found")
 	}
 
-	port := os.Getenv(dbhost)
+	port := os.Getenv(dbport)
 
 	if len(port) == 0 {
 		return nil, errors.New("db port not found")
