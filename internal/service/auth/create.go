@@ -2,7 +2,6 @@ package auth
 
 import (
 	"context"
-	"errors"
 
 	"github.com/drizzleent/auth/internal/model"
 )
@@ -12,7 +11,7 @@ func (s *Service) Create(ctx context.Context, user *model.UserCreate) (int64, er
 	id, err := s.repo.Create(ctx, user)
 
 	if err != nil {
-		return 0, errors.New("Service.Create: " + err.Error())
+		return 0, err
 	}
 
 	return id, nil

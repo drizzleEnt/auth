@@ -6,8 +6,6 @@ import (
 
 	"github.com/drizzleent/auth/internal/converter"
 	desc "github.com/drizzleent/auth/pkg/user_v2"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 func (i *Implementation) Create(ctx context.Context, req *desc.CreateRequest) (*desc.CreateResponse, error) {
@@ -16,7 +14,7 @@ func (i *Implementation) Create(ctx context.Context, req *desc.CreateRequest) (*
 
 	if err != nil {
 		log.Printf("error in service layer: %v\n", err.Error())
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	return &desc.CreateResponse{

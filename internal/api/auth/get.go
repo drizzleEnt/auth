@@ -6,8 +6,6 @@ import (
 
 	"github.com/drizzleent/auth/internal/converter"
 	desc "github.com/drizzleent/auth/pkg/user_v2"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 func (i *Implementation) Get(ctx context.Context, req *desc.GetRequest) (*desc.GetResponse, error) {
@@ -18,7 +16,7 @@ func (i *Implementation) Get(ctx context.Context, req *desc.GetRequest) (*desc.G
 
 	if err != nil {
 		log.Printf("Error try get user whit id=%v %v\n", req.Id, err)
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	log.Printf("Id = %d", authResp.UserCreate.UserUpdate.ID)

@@ -5,7 +5,6 @@ import (
 	"log"
 
 	"github.com/drizzleent/auth/internal/app"
-	_ "github.com/fatih/color"
 	_ "github.com/lib/pq"
 )
 
