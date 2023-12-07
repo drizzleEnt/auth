@@ -16,9 +16,10 @@ import (
 )
 
 type serviceProvider struct {
-	pgConfig   config.PGConfig
-	grpcCofig  config.GRPCConfig
-	httpConfig config.HTTPConfig
+	pgConfig     config.PGConfig
+	grpcCofig    config.GRPCConfig
+	httpConfig   config.HTTPConfig
+	swaggerCofig config.SwaggerConfig
 
 	dbClient db.Client
 	//txManager      db.TxManager
@@ -69,6 +70,18 @@ func (s *serviceProvider) HTTPConfig() config.HTTPConfig {
 	}
 
 	return s.httpConfig
+}
+
+func (s *serviceProvider) SwaggerConfig() config.SwaggerConfig {
+	if s.swaggerCofig == nil {
+		cfg, err := env.NewSwaggerConfig()
+		if err != nil {
+			log.Fatalf("failed to load swagger config: %s", err.Error())
+		}
+		s.swaggerCofig = cfg
+	}
+
+	return s.swaggerCofig
 }
 
 func (s *serviceProvider) DbClient(ctx context.Context) db.Client {

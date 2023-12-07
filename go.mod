@@ -14,6 +14,8 @@ require (
 	github.com/jackc/pgx/v4 v4.18.1
 	github.com/lib/pq v1.10.2
 	github.com/pkg/errors v0.9.1
+	github.com/rakyll/statik v0.1.7
+	github.com/rs/cors v1.10.1
 	github.com/stretchr/testify v1.8.4
 	github.com/subosito/gotenv v1.6.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20231106174013-bbf56f31fb17
@@ -23,7 +25,6 @@ require (
 
 require (
 	github.com/rogpeppe/go-internal v1.11.0 // indirect
-	github.com/rs/cors v1.10.1 // indirect
 	google.golang.org/genproto v0.0.0-20231030173426-d783a09b4405 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
