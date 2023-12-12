@@ -37,6 +37,24 @@ generate-user-api:
 	--plugin=protoc-gen-openapiv2=bin/protoc-gen-openapiv2 \
 	api/user_v2/user.proto
 
+generate-access-api:
+	mkdir -p pkg/access_v1
+	protoc --proto_path api/access_v1 --proto_path vendor.protogen \
+	--go_out=pkg/access_v1 --go_opt=paths=source_relative \
+	--plugin=protoc-gen-go=bin/protoc-gen-go \
+	--go-grpc_out=pkg/access_v1 --go-grpc_opt=paths=source_relative \
+	--plugin=protoc-gen-go-grpc=bin/protoc-gen-go-grpc \
+	api/access_v1/access.proto
+
+generate-login-api:
+	mkdir -p pkg/login_v1
+	protoc --proto_path api/login_v1 --proto_path vendor.protogen \
+	--go_out=pkg/login_v1 --go_opt=paths=source_relative \
+	--plugin=protoc-gen-go=bin/protoc-gen-go \
+	--go-grpc_out=pkg/login_v1 --go-grpc_opt=paths=source_relative \
+	--plugin=protoc-gen-go-grpc=bin/protoc-gen-go-grpc \
+	api/login_v1/login.proto
+
 install-golangci-lint:
 	GOBIN=$(LOCAL_BIN) go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.53.3
 

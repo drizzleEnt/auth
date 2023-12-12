@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+option go_package = "github.com/drizzleEnt/auth/pkg/login_v1;login_v1";
+
+service LoginV1{
+    rpc Login (LoginRequest) returns (LoginResponse);
+    rpc GetRefreshToken (GetRefreshTokenRequest) returns (GetRefreshTokenResponse);
+    rpc GetAccesToken (GetAccessTokenRequest) returns (GetAccessTokenResponse);
+}
+
+message Login{
+    string username = 1;
+    string password = 2;
+}
+
+message LoginRequest{
+    Login info = 1;
+}
+
+message LoginResponse{
+    string  refresh_token = 1;
+}
+
+message GetRefreshTokenRequest{
+    string  refresh_token = 1; 
+}
+
+message GetRefreshTokenResponse{
+    string  refresh_token = 1; 
+}
+
+message GetAccessTokenRequest{
+    string  refresh_token = 1; 
+}
+
+message GetAccessTokenResponse{
+    string  access_token = 1; 
+}

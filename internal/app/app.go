@@ -11,6 +11,8 @@ import (
 	"github.com/drizzleent/auth/internal/closer"
 	"github.com/drizzleent/auth/internal/config"
 	"github.com/drizzleent/auth/internal/interseptor"
+	descAccess "github.com/drizzleent/auth/pkg/access_v1"
+	descLogin "github.com/drizzleent/auth/pkg/login_v1"
 	desc "github.com/drizzleent/auth/pkg/user_v2"
 	_ "github.com/drizzleent/auth/statik"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -122,6 +124,9 @@ func (a *App) initGrpcServer(ctx context.Context) error {
 	reflection.Register(a.grpcServer)
 
 	desc.RegisterUserV1Server(a.grpcServer, a.serviceprovider.AuthImpl(ctx))
+	descAccess.RegisterAccessV1Server(a.grpcServer, a.serviceprovider.AccessImpl(ctx))
+	descLogin.RegisterLoginV1Server(a.grpcServer, a.serviceprovider.LoginImpl(ctx))
+
 	return nil
 }
 
