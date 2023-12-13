@@ -12,6 +12,7 @@ import (
 
 const (
 	refreshTokenExpiration = 1 * time.Minute
+	accessTokenExpiration  = 1 * time.Hour
 )
 
 func (s *serviceLogin) Login(ctx context.Context, info *model.UserClaims) (string, error) {
