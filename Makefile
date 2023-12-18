@@ -92,3 +92,14 @@ vendor-proto:
 			mv vendor.protogen/openapiv2/protoc-gen-openapiv2/options/*.proto vendor.protogen/protoc-gen-openapiv2/options &&\
 			rm -rf vendor.protogen/openapiv2 ;\
 		fi
+
+grpc-load-test:
+	$(LOCAL_BIN)/ghz \
+		--proto api/user_v2/user.proto \
+		--import-paths=./vendor.protogen/ \
+		--call user_v1.User_v1.Get \
+		--data '{"id": 1}' \
+		--rps 150 \
+		--total 5000 \
+		--insecure \
+		localhost:50051
