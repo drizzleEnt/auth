@@ -7,6 +7,10 @@ import (
 
 var globalLogger *zap.Logger
 
+func Logger() *zap.Logger {
+	return globalLogger
+}
+
 func Init(core zapcore.Core, options ...zap.Option) {
 	globalLogger = zap.New(core, options...)
 }

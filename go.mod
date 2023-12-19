@@ -16,6 +16,7 @@ require (
 	github.com/jackc/pgx/v4 v4.18.1
 	github.com/lib/pq v1.10.2
 	github.com/natefinch/lumberjack v2.0.0+incompatible
+	github.com/opentracing/opentracing-go v1.1.0
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.17.0
 	github.com/rakyll/statik v0.1.7
@@ -36,6 +37,9 @@ require (
 	github.com/prometheus/common v0.44.0 // indirect
 	github.com/prometheus/procfs v0.11.1 // indirect
 	github.com/rogpeppe/go-internal v1.11.0 // indirect
+	github.com/uber/jaeger-client-go v2.30.0+incompatible // indirect
+	github.com/uber/jaeger-lib v2.4.1+incompatible // indirect
+	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
 	google.golang.org/genproto v0.0.0-20231030173426-d783a09b4405 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect

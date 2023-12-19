@@ -8013,3 +8013,4 @@
 {"level":"info","timestamp":"2023-12-19T01:51:19.532+0300","msg":"request","method":"/user_v1.User_v1/Get","req":"id:1","duration":0.000520235}
 {"level":"info","timestamp":"2023-12-19T01:51:19.539+0300","msg":"request","method":"/user_v1.User_v1/Get","req":"id:1","duration":0.000440963}
 {"level":"info","timestamp":"2023-12-19T01:51:19.546+0300","msg":"request","method":"/user_v1.User_v1/Get","req":"id:1","duration":0.000527299}
+{"level":"info","timestamp":"2023-12-19T19:46:37.128+0300","msg":"request","method":"/user_v1.User_v1/Get","req":"id:1","duration":0.013183355}

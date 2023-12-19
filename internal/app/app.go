@@ -29,6 +29,7 @@ import (
 	"github.com/drizzleent/auth/internal/interseptor"
 	"github.com/drizzleent/auth/internal/logger"
 	"github.com/drizzleent/auth/internal/metric"
+	"github.com/drizzleent/auth/internal/tracing"
 	descAccess "github.com/drizzleent/auth/pkg/access_v1"
 	descLogin "github.com/drizzleent/auth/pkg/login_v1"
 	desc "github.com/drizzleent/auth/pkg/user_v2"
@@ -36,6 +37,8 @@ import (
 )
 
 var logLevel = flag.String("l", "info", "log level")
+
+const serviceName = "test-service"
 
 type App struct {
 	serviceprovider  *serviceProvider
@@ -143,6 +146,7 @@ func (a *App) initServiceProvider(_ context.Context) error {
 
 func (a *App) initGrpcServer(ctx context.Context) error {
 	logger.Init(getCore(getAtomicLevel()))
+	tracing.Init(logger.Logger(), serviceName)
 	err := metric.Init(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to init metrics: %v", err)
@@ -152,6 +156,7 @@ func (a *App) initGrpcServer(ctx context.Context) error {
 		grpc.Creds(insecure.NewCredentials()),
 		grpc.UnaryInterceptor(
 			grpcMiddleware.ChainUnaryServer(
+				interseptor.ServerTracingInterceptor,
 				interseptor.MetricInterceptor,
 				interseptor.LogInterceptor,
 				interseptor.ValidateInterceptor,
