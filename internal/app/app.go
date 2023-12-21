@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"sync"
+	"time"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -23,12 +24,14 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rakyll/statik/fs"
 	"github.com/rs/cors"
+	"github.com/sony/gobreaker"
 
 	"github.com/drizzleent/auth/internal/closer"
 	"github.com/drizzleent/auth/internal/config"
 	"github.com/drizzleent/auth/internal/interseptor"
 	"github.com/drizzleent/auth/internal/logger"
 	"github.com/drizzleent/auth/internal/metric"
+	ratelimiter "github.com/drizzleent/auth/internal/rate_limiter"
 	"github.com/drizzleent/auth/internal/tracing"
 	descAccess "github.com/drizzleent/auth/pkg/access_v1"
 	descLogin "github.com/drizzleent/auth/pkg/login_v1"
@@ -38,7 +41,7 @@ import (
 
 var logLevel = flag.String("l", "info", "log level")
 
-const serviceName = "test-service"
+const serviceName = "auth-service"
 
 type App struct {
 	serviceprovider  *serviceProvider
@@ -152,10 +155,14 @@ func (a *App) initGrpcServer(ctx context.Context) error {
 		return fmt.Errorf("failed to init metrics: %v", err)
 	}
 
+	rateLimiter := ratelimiter.NewTokenBucketLimiter(ctx, 100, 1*time.Second)
+
 	a.grpcServer = grpc.NewServer(
 		grpc.Creds(insecure.NewCredentials()),
 		grpc.UnaryInterceptor(
 			grpcMiddleware.ChainUnaryServer(
+				interseptor.NewCircuitBreakerInterceptor(getCircuitBreaker()).Unary,
+				interseptor.NewRateLimiterInterceptor(rateLimiter).Unary,
 				interseptor.ServerTracingInterceptor,
 				interseptor.MetricInterceptor,
 				interseptor.LogInterceptor,
@@ -358,4 +365,20 @@ func getAtomicLevel() zap.AtomicLevel {
 	}
 
 	return zap.NewAtomicLevelAt(level)
+}
+
+func getCircuitBreaker() *gobreaker.CircuitBreaker {
+	cb := gobreaker.NewCircuitBreaker(gobreaker.Settings{
+		Name:        serviceName,
+		MaxRequests: 50,
+		Timeout:     5,
+		ReadyToTrip: func(counts gobreaker.Counts) bool {
+			return counts.ConsecutiveFailures >= 20
+		},
+		OnStateChange: func(name string, from gobreaker.State, to gobreaker.State) {
+			log.Printf("Circuit Breaker: %s, changed from %v, to %v\n", name, from, to)
+		},
+	})
+
+	return cb
 }
