@@ -1,0 +1,27 @@
+{"level":"info","timestamp":"2024-02-13T01:57:40.015+0300","msg":"request","method":"/user_v1.User_v1/Create","req":"info:{user_update:{name:\"in\"}  password:\"in\"}","duration":0.011528951}
+{"level":"info","timestamp":"2024-02-13T01:59:48.704+0300","msg":"request","method":"/user_v1.User_v1/Create","req":"info:{user_update:{name:\"in\"}  password:\"sed exercitation\"}","duration":0.009587614}
+{"level":"info","timestamp":"2024-02-13T02:04:49.429+0300","msg":"request","method":"/user_v1.User_v1/Create","req":"info:{user_update:{name:\"dolor id cillum do\"}  password:\"laboris ipsum enim ad\"}","duration":0.009669052}
+{"level":"info","timestamp":"2024-02-13T02:05:34.093+0300","msg":"request","method":"/user_v1.User_v1/Create","req":"info:{user_update:{name:\"oleg\"}  password:\"324\"}","duration":0.005944134}
+{"level":"info","timestamp":"2024-02-13T02:13:41.709+0300","msg":"request","method":"/user_v1.User_v1/Create","req":"info:{user_update:{name:\"oleg\"}  password:\"fck\"}","duration":0.009671779}
+{"level":"info","timestamp":"2024-02-13T02:14:16.848+0300","msg":"request","method":"/user_v1.User_v1/Create","req":"info:{user_update:{name:\"ivan\"}  password:\"mfck\"}","duration":0.0113936}
+{"level":"error","timestamp":"2024-02-13T02:15:17.820+0300","msg":"Service.Get: no rows in result set","method":"/user_v1.User_v1/Get","req":""}
+{"level":"info","timestamp":"2024-02-13T02:15:17.820+0300","msg":"request","method":"/user_v1.User_v1/Get","req":"","duration":0.001621413}
+{"level":"error","timestamp":"2024-02-13T02:15:49.792+0300","msg":"Service.Get: no rows in result set","method":"/user_v1.User_v1/Get","req":""}
+{"level":"info","timestamp":"2024-02-13T02:15:49.792+0300","msg":"request","method":"/user_v1.User_v1/Get","req":"","duration":0.000699581}
+{"level":"error","timestamp":"2024-02-13T21:03:40.059+0300","msg":"Service.Get: no rows in result set","method":"/user_v1.User_v1/Get","req":""}
+{"level":"info","timestamp":"2024-02-13T21:03:40.059+0300","msg":"request","method":"/user_v1.User_v1/Get","req":"","duration":0.00763979}
+{"level":"info","timestamp":"2024-02-13T21:05:16.583+0300","msg":"request","method":"/user_v1.User_v1/Get","req":"username:\"oleg\" password:\"324\"","duration":0.000709555}
+{"level":"info","timestamp":"2024-02-13T21:06:27.892+0300","msg":"request","method":"/user_v1.User_v1/Get","req":"username:\"oleg\" password:\"324\"","duration":0.000724324}
+{"level":"info","timestamp":"2024-02-14T00:48:00.086+0300","msg":"request","method":"/LoginV1/Login","req":"info:{username:\"oleg\" password:\"324\"}","duration":0.000061654}
+{"level":"info","timestamp":"2024-02-14T00:51:39.155+0300","msg":"request","method":"/LoginV1/Login","req":"info:{username:\"oleg\" password:\"324\"}","duration":0.000018589}
+{"level":"info","timestamp":"2024-02-14T00:59:39.548+0300","msg":"request","method":"/LoginV1/Login","req":"info:{username:\"oleg\" password:\"324\"}","duration":0.000019199}
+{"level":"info","timestamp":"2024-02-14T01:00:18.134+0300","msg":"request","method":"/LoginV1/Login","req":"info:{username:\"oleg\" password:\"324\"}","duration":0.000021824}
+{"level":"error","timestamp":"2024-02-14T01:18:30.683+0300","msg":"Service.Get: no rows in result set","method":"/user_v1.User_v1/Get","req":"1:\"oleg\" 2:\"324\""}
+{"level":"info","timestamp":"2024-02-14T01:18:30.683+0300","msg":"request","method":"/user_v1.User_v1/Get","req":"1:\"oleg\" 2:\"324\"","duration":0.00650649}
+{"level":"info","timestamp":"2024-02-14T01:32:04.333+0300","msg":"request","method":"/LoginV1/Login","req":"info:{username:\"oleg\" password:\"324\"}","duration":0.000020254}
+{"level":"error","timestamp":"2024-02-14T01:32:17.516+0300","msg":"Service.Get: no rows in result set","method":"/user_v1.User_v1/Get","req":"1:\"oleg\" 2:\"324\""}
+{"level":"info","timestamp":"2024-02-14T01:32:17.516+0300","msg":"request","method":"/user_v1.User_v1/Get","req":"1:\"oleg\" 2:\"324\"","duration":0.000941322}
+{"level":"info","timestamp":"2024-02-14T01:35:02.586+0300","msg":"request","method":"/LoginV1/Login","req":"info:{username:\"oleg\" password:\"324\"}","duration":0.000019618}
+{"level":"info","timestamp":"2024-02-14T02:07:36.877+0300","msg":"request","method":"/LoginV1/Login","req":"info:{username:\"oleg\" password:\"321\"}","duration":0.000021489}
+{"level":"info","timestamp":"2024-02-14T02:09:43.262+0300","msg":"request","method":"/user_v1.User_v1/Create","req":"info:{user_update:{name:\"viol\"} password:\"qwerty\"}","duration":0.021884536}
+{"level":"info","timestamp":"2024-02-14T02:10:29.264+0300","msg":"request","method":"/LoginV1/Login","req":"info:{username:\"viol\" password:\"qwerty\"}","duration":0.000019696}

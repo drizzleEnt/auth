@@ -74,7 +74,7 @@ func (r *repo) Update(ctx context.Context, u *model.UserUpdate) error {
 	res, err := r.db.DB().ExecContext(ctx, q, args...)
 
 	if err != nil {
-		return fmt.Errorf("Failed to Update user: %v, tag: %v", err, res)
+		return fmt.Errorf("failed to Update user: %v, tag: %v", err, res)
 	}
 
 	return nil
@@ -91,7 +91,7 @@ func (r *repo) Delete(ctx context.Context, id int64) error {
 	res, err := r.db.DB().ExecContext(ctx, q, args...)
 
 	if err != nil {
-		return fmt.Errorf("Failed to Delete user: %v, tag: %v", err, res)
+		return fmt.Errorf("failed to Delete user: %v, tag: %v", err, res)
 	}
 
 	return nil

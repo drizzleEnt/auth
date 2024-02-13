@@ -8,13 +8,14 @@ import (
 
 	"github.com/brianvoe/gofakeit/v6"
 	"github.com/drizzleent/auth/internal/api/auth"
+	"google.golang.org/protobuf/types/known/timestamppb"
+
 	"github.com/drizzleent/auth/internal/model"
 	"github.com/drizzleent/auth/internal/service"
 	serviceMock "github.com/drizzleent/auth/internal/service/mocks"
 	desc "github.com/drizzleent/auth/pkg/user_v2"
 	"github.com/gojuno/minimock/v3"
 	"github.com/stretchr/testify/require"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 func TestGet(t *testing.T) {

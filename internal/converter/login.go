@@ -8,5 +8,6 @@ import (
 func ToUserClaimsFromLogin(req *desc.Login) *model.UserClaims {
 	return &model.UserClaims{
 		Username: req.GetUsername(),
+		Password: req.GetPassword(),
 	}
 }

@@ -25,36 +25,6 @@
   ],
   "paths": {
     "/user/v2": {
-      "get": {
-        "summary": "Get user",
-        "operationId": "User_v1_Get",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/user_v1GetResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "int64"
-          }
-        ],
-        "tags": [
-          "User_v1"
-        ]
-      },
       "delete": {
         "summary": "Delete user",
         "operationId": "User_v1_Delete",
@@ -145,6 +115,38 @@
             "schema": {
               "$ref": "#/definitions/user_v1CreateRequest"
             }
+          }
+        ],
+        "tags": [
+          "User_v1"
+        ]
+      }
+    },
+    "/user/v2/get": {
+      "get": {
+        "summary": "Get user",
+        "operationId": "User_v1_Get",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/user_v1GetResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
           }
         ],
         "tags": [

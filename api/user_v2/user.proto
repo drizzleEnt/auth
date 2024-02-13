@@ -37,7 +37,7 @@ service User_v1{
     //Get user
     rpc Get(GetRequest) returns (GetResponse){
         option (google.api.http)={
-            get: "/user/v2"
+            get: "/user/v2/get"
         };
     }
     //Update user
