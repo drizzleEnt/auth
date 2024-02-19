@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	refreshTokenExpiration = 1 * time.Minute
-	accessTokenExpiration  = 1 * time.Hour
+	refreshTokenExpiration = 60 * time.Minute
+	accessTokenExpiration  = 10 * time.Minute
 )
 
 func (s *serviceLogin) Login(ctx context.Context, info *model.UserClaims) (string, error) {
@@ -20,11 +20,12 @@ func (s *serviceLogin) Login(ctx context.Context, info *model.UserClaims) (strin
 
 	r, err := s.loginRepository.GetUserRole(ctx)
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 
 	refreshToken, err := utils.GenerateToken(model.UserInfo{
 		UserName: info.Username,
+		Password: info.Password,
 		Role:     r,
 	}, []byte(refreshTokenSecretKey),
 		refreshTokenExpiration,

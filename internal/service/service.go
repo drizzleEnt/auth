@@ -15,6 +15,7 @@ type AuthService interface {
 
 type AccessService interface {
 	Check(ctx context.Context, endpointAddress string) error
+	GetName(ctx context.Context) (string, error)
 }
 
 type LoginService interface {

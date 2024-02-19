@@ -21,5 +21,6 @@ func NewAccessRepository(db db.Client) repository.AccessRepository {
 func (r *repo) Check(ctx context.Context) (map[string]string, error) {
 	accessbileRoles := make(map[string]string)
 	accessbileRoles[model.ExamplePath] = "admin"
+
 	return accessbileRoles, nil
 }

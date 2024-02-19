@@ -14,6 +14,7 @@ func GenerateToken(info model.UserInfo, secretKey []byte, duration time.Duration
 			ExpiresAt: time.Now().Add(duration).Unix(),
 		},
 		Username: info.UserName,
+		Password: info.Password,
 		Role:     info.Role,
 	}
 
