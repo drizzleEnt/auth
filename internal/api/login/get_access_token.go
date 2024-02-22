@@ -15,5 +15,5 @@ func (i *Implementation) GetAccesToken(ctx context.Context, req *desc.GetAccessT
 
 	return &desc.GetAccessTokenResponse{
 		AccessToken: obj,
-	}, err
+	}, nil
 }
