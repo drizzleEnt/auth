@@ -340,3 +340,11 @@
 {"level":"info","timestamp":"2024-02-21T17:55:22.574+0300","msg":"request","method":"/access_v1.AccessV1/GetName","req":"","duration":0.000031035}
 {"level":"info","timestamp":"2024-02-21T17:55:22.575+0300","msg":"request","method":"/access_v1.AccessV1/Check","req":"","duration":0.00002771}
 {"level":"info","timestamp":"2024-02-21T17:55:39.292+0300","msg":"request","method":"/access_v1.AccessV1/Check","req":"","duration":0.000040382}
+{"level":"info","timestamp":"2024-02-22T17:39:46.384+0300","msg":"request","method":"/user_v1.User_v1/Create","req":"info:{user_update:{name:\"gleb\"} password:\"qwerty\"}","duration":0.015135468}
+{"level":"info","timestamp":"2024-02-22T17:39:46.390+0300","msg":"request","method":"/LoginV1/Login","req":"info:{username:\"gleb\" password:\"qwerty\"}","duration":0.004601941}
+{"level":"info","timestamp":"2024-02-22T17:39:46.390+0300","msg":"request","method":"/LoginV1/GetAccesToken","req":"refresh_token:\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDg2MTYzODYsInVzZXJuYW1lIjoiZ2xlYiIsInBhc3N3b3JkIjoicXdlcnR5Iiwicm9sZSI6IjAifQ.Gf8HfOuhChW3jnhwdPAyyCQAHuJNntXqwQwDMnwL0-o\"","duration":0.000043084}
+{"level":"info","timestamp":"2024-02-22T17:44:09.894+0300","msg":"request","method":"/access_v1.AccessV1/Check","req":"","duration":0.000049015}
+{"level":"info","timestamp":"2024-02-22T17:44:32.022+0300","msg":"request","method":"/access_v1.AccessV1/Check","req":"","duration":0.000040344}
+{"level":"info","timestamp":"2024-02-22T17:44:32.023+0300","msg":"request","method":"/access_v1.AccessV1/GetName","req":"","duration":0.000037002}
+{"level":"info","timestamp":"2024-02-22T17:44:32.024+0300","msg":"request","method":"/access_v1.AccessV1/Check","req":"","duration":0.000032593}
+{"level":"info","timestamp":"2024-02-22T17:44:54.300+0300","msg":"request","method":"/access_v1.AccessV1/Check","req":"","duration":0.000038982}

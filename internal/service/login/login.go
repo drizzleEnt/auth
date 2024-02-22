@@ -18,7 +18,7 @@ const (
 func (s *serviceLogin) Login(ctx context.Context, info *model.UserClaims) (string, error) {
 	refreshTokenSecretKey := os.Getenv("refreshTokenSecretKey")
 
-	r, err := s.loginRepository.GetUserRole(ctx)
+	r, err := s.loginRepository.Login(ctx, info)
 	if err != nil {
 		return "", err
 	}
