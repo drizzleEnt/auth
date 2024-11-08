@@ -19,13 +19,13 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	grpcMiddleware "github.com/grpc-ecosystem/go-grpc-middleware"
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/natefinch/lumberjack"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rakyll/statik/fs"
 	"github.com/rs/cors"
 	"github.com/sony/gobreaker"
 
+	"github.com/drizzleent/auth/internal/api/controller"
 	"github.com/drizzleent/auth/internal/closer"
 	"github.com/drizzleent/auth/internal/config"
 	"github.com/drizzleent/auth/internal/interseptor"
@@ -44,7 +44,7 @@ var logLevel = flag.String("l", "info", "log level")
 const serviceName = "auth-service"
 
 type App struct {
-	serviceprovider  *serviceProvider
+	serviceProvider  *serviceProvider
 	grpcServer       *grpc.Server
 	httpServer       *http.Server
 	swaggerServer    *http.Server
@@ -143,7 +143,7 @@ func (a *App) initConfig(_ context.Context) error {
 }
 
 func (a *App) initServiceProvider(_ context.Context) error {
-	a.serviceprovider = newServiceProvider()
+	a.serviceProvider = newServiceProvider()
 	return nil
 }
 
@@ -171,25 +171,38 @@ func (a *App) initGrpcServer(ctx context.Context) error {
 		))
 	reflection.Register(a.grpcServer)
 
-	desc.RegisterUserV1Server(a.grpcServer, a.serviceprovider.AuthImpl(ctx))
-	descAccess.RegisterAccessV1Server(a.grpcServer, a.serviceprovider.AccessImpl(ctx))
-	descLogin.RegisterLoginV1Server(a.grpcServer, a.serviceprovider.LoginImpl(ctx))
+	desc.RegisterUserV1Server(a.grpcServer, a.serviceProvider.AuthImpl(ctx))
+	descAccess.RegisterAccessV1Server(a.grpcServer, a.serviceProvider.AccessImpl(ctx))
+	descLogin.RegisterLoginV1Server(a.grpcServer, a.serviceProvider.LoginImpl(ctx))
 
 	return nil
 }
 
 func (a *App) initHTTPServer(ctx context.Context) error {
-	mux := runtime.NewServeMux()
+	// mux := runtime.NewServeMux()
 
-	opts := []grpc.DialOption{
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-	}
+	// opts := []grpc.DialOption{
+	// 	grpc.WithTransportCredentials(insecure.NewCredentials()),
+	// }
 
-	err := desc.RegisterUserV1HandlerFromEndpoint(ctx, mux, a.serviceprovider.HTTPConfig().Address(), opts)
+	// err := desc.RegisterUserV1HandlerFromEndpoint(ctx, mux, a.serviceprovider.HTTPConfig().Address(), opts)
 
-	if err != nil {
-		return err
-	}
+	// if err != nil {
+	// 	return err
+	// }
+
+	// err = descLogin.RegisterLoginV1HandlerFromEndpoint(ctx, mux, a.serviceprovider.HTTPConfig().Address(), opts)
+
+	// if err != nil {
+	// 	return err
+	// }
+
+	controller := controller.NewController(a.serviceProvider.LoginService(ctx))
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("/Login", controller.Login)
+	mux.HandleFunc("/GetRefreshToken", controller.GetRefreshToken)
+	mux.HandleFunc("/GetAccesToken", controller.GetAccessToken)
 
 	corsMiddleware := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
@@ -199,7 +212,7 @@ func (a *App) initHTTPServer(ctx context.Context) error {
 	})
 
 	a.httpServer = &http.Server{
-		Addr:    a.serviceprovider.httpConfig.Address(),
+		Addr:    a.serviceProvider.HTTPConfig().Address(),
 		Handler: corsMiddleware.Handler(mux),
 	}
 
@@ -218,7 +231,7 @@ func (a *App) initSwaggerServer(ctx context.Context) error {
 	mux.HandleFunc("/api.swagger.json", serveSwaggerServer("/api.swagger.json"))
 
 	a.swaggerServer = &http.Server{
-		Addr:    a.serviceprovider.SwaggerConfig().Address(),
+		Addr:    a.serviceProvider.SwaggerConfig().Address(),
 		Handler: mux,
 	}
 
@@ -230,7 +243,7 @@ func (a *App) initPrometheusServer(ctx context.Context) error {
 	mux.Handle("/metrics", promhttp.Handler())
 
 	a.prometheusServer = &http.Server{
-		Addr:    a.serviceprovider.PrometheusConfig().Address(),
+		Addr:    a.serviceProvider.PrometheusConfig().Address(),
 		Handler: mux,
 	}
 
@@ -238,9 +251,9 @@ func (a *App) initPrometheusServer(ctx context.Context) error {
 }
 
 func (a *App) runGrpcServer() error {
-	log.Printf("GRPC server is running on %s", a.serviceprovider.GRPCConfig().Address())
+	log.Printf("GRPC server is running on %s", a.serviceProvider.GRPCConfig().Address())
 
-	list, err := net.Listen("tcp", a.serviceprovider.GRPCConfig().Address())
+	list, err := net.Listen("tcp", a.serviceProvider.GRPCConfig().Address())
 
 	if err != nil {
 		return err
@@ -257,7 +270,7 @@ func (a *App) runGrpcServer() error {
 
 func (a *App) runHTTPServer() error {
 
-	log.Printf("HTTP server is running on %s", a.serviceprovider.HTTPConfig().Address())
+	log.Printf("HTTP server is running on %s", a.serviceProvider.HTTPConfig().Address())
 
 	err := a.httpServer.ListenAndServe()
 	if err != nil {
@@ -268,7 +281,7 @@ func (a *App) runHTTPServer() error {
 }
 
 func (a *App) runSwaggerServer() error {
-	log.Printf("Swagger server running on: %s", a.serviceprovider.SwaggerConfig().Address())
+	log.Printf("Swagger server running on: %s", a.serviceProvider.SwaggerConfig().Address())
 
 	err := a.swaggerServer.ListenAndServe()
 	if err != nil {
@@ -279,7 +292,7 @@ func (a *App) runSwaggerServer() error {
 }
 
 func (a *App) runPrometheusServer() error {
-	log.Printf("Prometheus server is running on %s", a.serviceprovider.PrometheusConfig().Address())
+	log.Printf("Prometheus server is running on %s", a.serviceProvider.PrometheusConfig().Address())
 
 	err := a.prometheusServer.ListenAndServe()
 	if err != nil {

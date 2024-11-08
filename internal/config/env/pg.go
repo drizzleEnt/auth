@@ -18,7 +18,7 @@ const (
 	dbname     = "PG_DATABASE_NAME"
 	dbuser     = "PG_USER"
 	dbpassword = "PG_PASSWORD"
-	dbport     = "PG_PORT"
+	dbport     = "PG_PORT_AUTH"
 	dbhost     = "PG_HOST"
 	dbssl      = "PG_SSL"
 )

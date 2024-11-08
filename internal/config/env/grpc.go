@@ -11,8 +11,8 @@ import (
 var _ config.GRPCConfig = (*grpcConfig)(nil)
 
 const (
-	grpcHostEnvName = "GRPC_HOST"
-	grpcPortEnvName = "GRPC_PORT"
+	grpcHostEnvName = "GRPC_HOST_AUTH"
+	grpcPortEnvName = "GRPC_PORT_AUTH"
 )
 
 type grpcConfig struct {

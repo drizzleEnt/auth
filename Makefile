@@ -52,6 +52,8 @@ generate-login-api:
 	--go_out=pkg/login_v1 --go_opt=paths=source_relative \
 	--plugin=protoc-gen-go=bin/protoc-gen-go \
 	--go-grpc_out=pkg/login_v1 --go-grpc_opt=paths=source_relative \
+	--grpc-gateway_out=pkg/login_v1 --grpc-gateway_opt=paths=source_relative \
+	--plugin=protoc-gen-grpc-gateway=bin/protoc-gen-grpc-gateway \
 	--plugin=protoc-gen-go-grpc=bin/protoc-gen-go-grpc \
 	api/login_v1/login.proto
 
